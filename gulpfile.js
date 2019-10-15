@@ -4,6 +4,7 @@ var sass = require("gulp-sass");
 var azure = require("gulp-azure-storage");
 var fileinclude = require('gulp-file-include');
 var log = require("fancy-log");
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('sass', function() {
     return gulp
@@ -11,7 +12,10 @@ gulp.task('sass', function() {
             'node_modules/bootstrap/scss/bootstrap.scss', 
             'src/scss/*.scss'
         ])
+        .pipe(sourcemaps.init())
         .pipe(sass())
+        // .pipe(sass({outputStyle: 'compressed'}))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest("dist/css"))
         .pipe(browserSync.stream());
 });
@@ -19,6 +23,7 @@ gulp.task('sass', function() {
 gulp.task('js', function() {
     return gulp
         .src([
+            'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js', 
             'node_modules/bootstrap/dist/js/bootstrap.min.js', 
             'node_modules/jquery/dist/jquery.min.js', 
             'node_modules/popper.js/dist/popper.min.js',
