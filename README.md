@@ -47,7 +47,13 @@ Vychazim z [tohoto tutorialu](https://coursetro.com/posts/design/72/Installing-B
 
 ### Chyba gulp not recognized
 
-`npm install -g gulp-cli`
+`npm install -g gulp-cli` nebo `npm install -g gulp` ?
+
+### Chyba gulp : File gulp.ps1 cannot be loaded because running scripts is disabled on this system. 
+
+[Popis prav v PowerShell](https:/go.microsoft.com/fwlink/?LinkID=135170)
+
+`Get-ExecutionPolicy` a hlavne `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned`
 
 ## TODO
 
