@@ -22,11 +22,12 @@ Vysledny balicek je tedy v adresarich `content` a `dist`.
 
 Pouziva se Azure Storage s funkci Static website. K tomu je potreba udelat storage typu V2. Je treba povolit Static website a urcit index.html. Publikuje se do kontejneru $web.
 
+**Storage account pro Azure je treba ulozit do souboru `azure-credentials.json`, ktery neni v repository.**
+Jeho vzor je v souboru `azure-credentials.json`.
+
 Spusteni pomoci `gulp publish`
 
 URL se da vypsat do logu.
-
-**Nastaveni azure je treba udelat do `gulpfile.js`**
 
 ## Jak to cele vzniklo
 

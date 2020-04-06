@@ -6,15 +6,16 @@ var fileinclude = require('gulp-file-include');
 var log = require("fancy-log");
 var sourcemaps = require('gulp-sourcemaps');
 
+const azureCredentials = require('./azure-credentials');
+
 gulp.task('sass', function() {
     return gulp
         .src([
-            'node_modules/bootstrap/scss/bootstrap.scss', 
             'src/scss/*.scss'
         ])
         .pipe(sourcemaps.init())
         .pipe(sass())
-        // .pipe(sass({outputStyle: 'compressed'}))
+        // .pipe(sass({outputStyle: 'expanded'}))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest("dist/css"))
         .pipe(browserSync.stream());
@@ -31,6 +32,17 @@ gulp.task('js', function() {
         ])
         .pipe(gulp.dest("dist/js"))
         .pipe(browserSync.stream());
+});
+
+gulp.task('css', function() {
+    return gulp
+        .src([
+            'node_modules/bootstrap/dist/css/bootstrap.css', 
+            'node_modules/bootstrap/dist/css/bootstrap.css.map', 
+            'node_modules/bootstrap/dist/css/bootstrap.min.css', 
+            'node_modules/bootstrap/dist/css/bootstrap.min.css.map'
+        ])
+        .pipe(gulp.dest("dist/css"));
 });
 
 gulp.task('fileinclude', function() {
@@ -52,7 +64,6 @@ gulp.task('serve', function() {
     });
 
     gulp.watch([
-        'node_modules/bootstrap/scss/bootstrap.scss', 
         'src/scss/*.scss'
     ], gulp.series('sass'));
 
@@ -68,7 +79,7 @@ gulp.task('serve', function() {
     gulp.watch('dist/*.html').on('change', browserSync.reload);
 });
 
-gulp.task('default', gulp.series('sass', 'js', 'fileinclude', 'serve'));
+gulp.task('default', gulp.series('sass', 'css', 'js', 'fileinclude', 'serve'));
 
 gulp.task('publish', function() {
     return gulp
@@ -77,10 +88,10 @@ gulp.task('publish', function() {
             'content/**'
         ])
         .pipe(azure.upload({
-    	    "account": "xxxxxxxxxxxxxxxxxxxxxxxxx",
-    	    "key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-            "container":  "$web",
-            "prefix": "", // tohle muze byt prazdne, pak je to root, jinak adresar (a za nim lomitko!!!!), kde to bude.
+    	    "account": azureCredentials.azure.account,
+    	    "key": azureCredentials.azure.key,
+            "container":  azureCredentials.azure.container,
+            "prefix": azureCredentials.azure.prefix, // tohle muze byt prazdne, pak je to root, jinak adresar (a za nim lomitko!!!!), kde to bude.
         }))
-        .on("end", function() { log("Publikovano na \x1b[33m%s\x1b[0m", "https://xxxxxx.web.core.windows.net/");});
+        .on("end", function() { log("Publikovano na \x1b[33m%s\x1b[0m", `https://${azureCredentials.azure.account}.z6.web.core.windows.net/${azureCredentials.azure.prefix}`);});
 })
